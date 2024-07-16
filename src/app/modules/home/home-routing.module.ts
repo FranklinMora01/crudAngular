@@ -7,6 +7,10 @@ const routes: Routes = [
     loadChildren: () => import('@modules/users/users.module').then( m => m.UsersModule)
   },
   {
+    path: 'user-update/:id', 
+    loadChildren: () => import('@modules/update-user/update-user.module').then( m => m.UpdateUserModule)
+  },
+  {
     path: '**',
     redirectTo: '/users'
   }
