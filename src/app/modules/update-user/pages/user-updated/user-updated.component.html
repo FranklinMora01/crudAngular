@@ -6,23 +6,58 @@
         <div class="row">
             <div class="col-6 offset-3 formulario">
                 <!-- formulario -->
-                <h2 class="text-center-mb-5">Editar Clientes</h2>
-                <form id="formulario">
+                <h2 class="text-center mb-5">Editar Clientes</h2>
+                <form #formUpdateUser="ngForm" (ngSubmit)="updateUser()">
                     <div class="mb3">
                         <label for="nombre" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="nombre" name="nombre" [(ngModel)]="userHtml.nombre">
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            id="nombre" 
+                            name="nombre" 
+                            [(ngModel)]="userHtml.nombre" 
+                            required 
+                            minlength="3"
+                        >
+                        <!-- se hace validacion desde la parte logica -->
+                        <!-- <span class="form-text text-danger" *ngIf="nombreValidado()">El nombre no puede quedar vacio, ni ser menor a 3 digitos</span> -->
+                        <!-- se hace validacion desde el html -->
+                        <samp class="form-text text-danger" *ngIf="formUpdateUser.controls['nombre']?.invalid && formUpdateUser.controls['nombre']?.touched">El nombre no puede esta vacio ni menor a 3 digitos</samp>
                     </div>
                     <div class="mb-3">
                         <label for="mail" class="form-label">Correo</label>
-                        <input type="email" class="form-control" id="email" name="email" [(ngModel)]="userHtml.mail">
+                        <input 
+                            type="email" 
+                            class="form-control" 
+                            id="email" 
+                            name="email" 
+                            [(ngModel)]="userHtml.mail" 
+                            [pattern]="regexEmail" 
+                            required
+                        > 
+                        <span class="form-text text-danger" *ngIf="correoValidado()">El email debe tener formato de correo. </span>
                     </div>
                     <div class="mb-3">
                         <label for="telefono" class="form-label">Telefono</label>
-                        <input type="tel" class="form-control" id="telefono" name="telefono" [(ngModel)]="userHtml.telefono">
+                        <input 
+                            type="tel" 
+                            class="form-control" 
+                            id="telefono" 
+                            name="telefono" 
+                            [(ngModel)]="userHtml.telefono" 
+                            required minlength="5"
+                        >
+                        <span class="form-text text-danger" *ngIf="correoTelefono()">El telefono no puede quedar vacio y no puede ser menor a 3 digitos </span>
                     </div>
                     <div class="mb-3">
-                        <label for="empresa" class="form-label">Empresa</label>
-                        <input type="text" class="form-control" id="empresa" name="empresa" [(ngModel)]="userHtml.empresa">
+                            <label for="empresa" class="form-label">Empresa</label>
+                            <input 
+                            type="text" 
+                            class="form-control" 
+                            id="empresa" 
+                            name="empresa" 
+                            [(ngModel)]="userHtml.empresa"
+                        >
                     </div>
                     <input type="hidden" name="id" id="id" value="">
                     <div class="d-grid grap-2">
@@ -30,6 +65,20 @@
                     </div>
                     <div class="form-text"></div>
                 </form>
+
+                <div class="col">
+                    <span>Valid</span>
+                    <pre>{{ formUpdateUser.valid }}</pre>
+                    <span>Pristine</span>
+                    <pre>{{ formUpdateUser.pristine }}</pre>
+                    <!-- no se ha cambiado ningun valor insterno en el formulario 
+                    desde que se presento al usuario -->
+                    <span>Touched</span>
+                    <pre>{{ formUpdateUser.touched }}</pre>
+                    <span>Value</span>
+                    <pre>{{ formUpdateUser.value | json }}</pre>
+                </div>
+
             </div>
         </div>
     </div>

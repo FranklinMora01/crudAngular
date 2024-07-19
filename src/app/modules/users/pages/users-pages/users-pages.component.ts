@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { UsersService } from '@modules/users/services/users.service';
 import { IUser } from '../../../../core/models/IUser';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-users-pages',
@@ -13,7 +15,8 @@ import { CommonModule } from '@angular/common';
 export class UsersPagesComponent implements OnInit{
   
   public userHtml: IUser[] = [];
-  constructor(private userService: UsersService){
+  constructor(private userService: UsersService,
+    private router: Router){
 
   }
   
@@ -29,11 +32,29 @@ export class UsersPagesComponent implements OnInit{
   }
 
   updateUser(id: any){
-    console.log(id);
-  }
+    this.router.navigate(['/user-update', id])
+  }  
 
   deleteUser(id: any){
-    console.log(id);
+    const idUser = Number(id);
+
+    Swal.fire({
+      title: "¿Estas Seguro?",
+      text: "Estas a punto de eliminar el usuario",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, Borra ahora!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.userService.deleteUser(idUser).subscribe( resp => {
+          if(resp){
+            this.getUserAll();
+          }
+        })
+        }
+      });
   }
 
 
